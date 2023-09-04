@@ -1,0 +1,9 @@
+position tha loader correcctly
+
+change banner to display 10 latest trending movies
+
+
+<a> tag page ko refresh kr deta h 
+but Link nhi krta
+agr page refresh hua toh saari state value udd jayengi
+isliye a tag use nhi krte mostly

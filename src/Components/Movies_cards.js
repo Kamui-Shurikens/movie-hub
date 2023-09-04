@@ -1,69 +1,134 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { movies } from './GetMovies';
+import { Link } from 'react-router-dom';
+import { updateFavsFromFireBase, updateFavsToFireBase } from '../firebase';
 export default class Movies_cards extends Component {
 
-    constructor(){
+    constructor() {
         super();
         this.state = {
-            pageArr : [1],  // this will help in creating pagination buttons
-            currPage : 1,
-            movies: []   // array of arrays, each array consisting a list of 20 movies
+            pageArr: [1],  // this will help in creating pagination buttons
+            currPage: 1,
+            movies: [],   // array of arrays, each array consisting a list of 20 movies
+            FavouritesArray: [],
+            changeState: true
         }
     }
-
-    async componentDidMount(){
-        const resp = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=d2d5c04da9b8133f121a383dc3cb2d2a&page=${this.state.currPage}&language=en-US?inlcude_adult=true`)
-        const data = resp.data
+    async componentDidMount() {
+        updateFavsFromFireBase()
+        let resp;
+        if(this.props.genreTypeID == undefined)
+            resp = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?language=en&api_key=d2d5c04da9b8133f121a383dc3cb2d2a&page=${this.state.currPage}`)
+        else
+            resp = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=d2d5c04da9b8133f121a383dc3cb2d2a&with_genres=${this.props.genreTypeID}&page=${this.state.currPage}`)
+        const data = resp.data.results
+        // console.log(resp)
+        let fvArr = []
+        if(localStorage.getItem("Favourites") != undefined)
+        {
+            fvArr = JSON.parse(localStorage.getItem("Favourites"))
+        }
+        else 
+        {
+            fvArr = []
+        }
         this.setState({
-            movies:[...data.results]
+            movies: [...data],
+            FavouritesArray : [...fvArr]
         })
-        console.log(data.results)
+        //console.log("response")
+        // console.log(this.FavouritesArray)
     }
 
-    async updatePage(){
-        const resp = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=d2d5c04da9b8133f121a383dc3cb2d2a&page=${this.state.currPage}&language=en-US?inlcude_adult=true`)
+    async updatePage() {
+        let resp;
+        if(this.props.genreTypeID == undefined)
+            resp = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?language=en&api_key=d2d5c04da9b8133f121a383dc3cb2d2a&page=${this.state.currPage}`)
+        else
+            resp = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=d2d5c04da9b8133f121a383dc3cb2d2a&with_genres=${this.props.genreTypeID}&page=${this.state.currPage}`)
         const data = resp.data
+        var focus = document.getElementById('trending');
+        // console.log(focus);
+        focus.scrollIntoView({ behavior: 'auto' });
         this.setState({
-            movies:[...data.results]
-        },()=>{
-            if(this.state.currPage > this.state.pageArr.length)
-            {
+            movies: [...data.results]
+        }, () => {
+            if (this.state.currPage > this.state.pageArr.length) {
                 let tempPageArr = [...this.state.pageArr]
                 tempPageArr.push(this.state.currPage);
                 this.setState({
-                    pageArr : [...tempPageArr]
+                    pageArr: [...tempPageArr]
                 })
             }
         })
     }
 
-    nextPage = ()=>
-    {
+    nextPage = () => {
         this.setState({
-            currPage : this.state.currPage+1
-        },this.updatePage)
+            currPage: this.state.currPage + 1
+        }, this.updatePage)
 
     }
 
-    setPage = (pageNum)=>{
+    setPage = (pageNum) => {
         this.setState({
-            currPage : pageNum
-        },this.updatePage)
+            currPage: pageNum
+        }, this.updatePage)
     }
 
-    prevPage = ()=>{
-        if(this.state.currPage != 1)
-        {
+    prevPage = () => {
+        if (this.state.currPage != 1) {
             this.setState({
-                currPage: this.state.currPage-1
-            },this.updatePage)
+                currPage: this.state.currPage - 1
+            }, this.updatePage)
         }
+    }
+
+    addToFav = (movieID) => {
+        let fv = localStorage.getItem("Favourites")
+        let fvArr = []
+        if (fv == undefined) {
+            fvArr = [String(movieID)]
+            // this.state.FavouritesArray = [...fvArr]
+            fv = JSON.stringify(fvArr)
+            localStorage.setItem("Favourites", fv)
+        }
+        else {
+            fvArr = JSON.parse(fv)
+            fvArr.push(String(movieID))
+            //this.FavouritesArray = [...fvArr]
+            fv = JSON.stringify(fvArr)
+            localStorage.setItem("Favourites", fv)
+        }
+        updateFavsToFireBase()
+        this.setState({
+            changeState: !this.state.changeState,
+            FavouritesArray : [...fvArr]
+        })
+    }
+
+    rmvFromFav = (movieID) => {
+        let fv = localStorage.getItem("Favourites")
+        let fvArr = JSON.parse(fv)
+        movieID = String(movieID)
+        let ind = 0;
+        while ((ind < fvArr.length) && (fvArr[ind] != movieID)) {
+            ind += 1;
+        }
+        fvArr.splice(ind, 1)
+        //this.FavouritesArray = [...fvArr]
+        fv = JSON.stringify(fvArr)
+        localStorage.setItem("Favourites", fv)
+        updateFavsToFireBase()
+        this.setState({
+            changeState: !this.state.changeState,
+            FavouritesArray : [...fvArr]
+        })
     }
 
 
     render() {
-
+        let genreIDtoName = { 28: 'Action', 12: 'Adventure', 16: 'Animation', 35: 'Comedy', 80: 'Crime', 99: 'Documentary', 18: 'Drama', 10751: 'Family', 14: 'Fantasy', 36: 'History', 27: 'Horror', 10402: 'Music', 9648: 'Mystery', 10749: 'Romance', 878: 'Sci-fi', 10770: 'TV', 53: 'Thriller', 10752: 'War', 37: 'Western' };
         return (
             <>
                 {
@@ -73,12 +138,15 @@ export default class Movies_cards extends Component {
                         </div>
                         :
                         <div>
-                            <div><strong><h1 style={{ color: "white", }}># Trending </h1></strong></div>
+                            <div id='trending'><strong><h1 style={{ color: "white", }}># {
+                                (this.props.genreTypeID == undefined)? "Trending" : genreIDtoName[this.props.genreTypeID]
+                            } </h1></strong></div>
                             <div className="movieList" >
 
                                 {
                                     this.state.movies.map((movieObj) => (
                                         <div className='full-card' key={movieObj.id}>
+                                            <Link to={`/moviepage/${movieObj.id}`} >
                                             <div className="card mb-3 movie-card" style={{ maxWidth: "617px", backgroundColor: "black" }}>
                                                 <div className="row g-0" style={{ backgroundColor: "black" }}>
                                                     <div className="col-md-4" style={{ backgroundColor: "black" }}>
@@ -93,25 +161,31 @@ export default class Movies_cards extends Component {
                                                     </div>
                                                 </div>
                                             </div>
+                                            </Link>
                                             <div className="d-grid gap-2">
-                                                <button className="btn btn-outline-danger add-to-fav" type="button">Add To Favourites</button>
+                                                {
+                                                    (this.state.FavouritesArray.includes(String(movieObj.id)))?
+                                                    <button className="btn btn-outline-danger rmv-from-fav" type="button" onClick={()=>this.rmvFromFav(movieObj.id)} >Remove From Favourites</button>
+                                                    :
+                                                    <button className="btn btn-outline-danger add-to-fav" type="button" onClick={()=>this.addToFav(movieObj.id)}>Add To Favourites</button>
+                                                }
                                             </div>
                                         </div>
                                     ))
                                 }
                             </div>
-                            <div style={{display:"flex",justifyContent:"center"}}>
-                            <nav aria-label="Page navigation example">
-                                <ul className="pagination">
-                                    <li className="page-item"><a className="page-link" onClick={this.prevPage} style={{backgroundColor:"black",color:"greenyellow"}} >Previous</a></li>
-                                    {
-                                        this.state.pageArr.map((pageNum) => (
-                                            <li className="page-item" key ={pageNum}   ><a className="page-link" onClick={()=> this.setPage(pageNum)} >{pageNum}</a></li>
-                                        ))
-                                    }
-                                    <li className="page-item"><a className="page-link" onClick={this.nextPage}  style={{backgroundColor:"black",color:"greenyellow"}} >Next</a></li>
-                                </ul>
-                            </nav>
+                            <div style={{ display: "flex", justifyContent: "center" }}>
+                                <nav aria-label="Page navigation example">
+                                    <ul className="pagination">
+                                        <li className="page-item"><a className="page-link" onClick={this.prevPage} style={{ backgroundColor: "black", color: "greenyellow" }} >Previous</a></li>
+                                        {
+                                            this.state.pageArr.map((pageNum) => (
+                                                <li className="page-item" key={pageNum}   ><a className="page-link" onClick={() => this.setPage(pageNum)} >{pageNum}</a></li>
+                                            ))
+                                        }
+                                        <li className="page-item"><a className="page-link" onClick={this.nextPage} style={{ backgroundColor: "black", color: "greenyellow" }} >Next</a></li>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
 

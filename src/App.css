@@ -28,6 +28,14 @@
   color: #61dafb;
 }
 
+.mpBanner{
+  height: 1vh;
+}
+
+.poster-card{
+  height: 50vh;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

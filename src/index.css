@@ -43,7 +43,11 @@ z-index: 2;
 height: 90vh;
 }
 
-.card {
+/* .card {
+
+} */
+
+.banner-card{
   position: relative;
   bottom: 30vh;
   left: 15vw;
@@ -52,6 +56,7 @@ height: 90vh;
   color: white !important;
   opacity: 85%;
   z-index: 10;
+  background-color: black;
 }
 
 .card-title{
@@ -64,6 +69,14 @@ body{
 }
 
 .movie-card{
+  position: relative;
+  bottom: 30vh;
+  left: 15vw;
+  width: 70vw;
+  background-color: black !important;
+  color: white !important;
+  opacity: 85%;
+  z-index: 10;
   background-color: black;
   position: relative;
   top: 0;
@@ -75,6 +88,13 @@ body{
   border-width: 3px;
   border-color: yellow ;
   border-radius: 0;
+}
+
+.category-cards{
+  display: inline-block;
+  margin: 1rem;
+  height: 15vh;
+  width: 20vw;
 }
 
 .movieList{
@@ -90,6 +110,16 @@ body{
   border-style: solid;
   border-width: 3px ;
   border-color: green;
+  margin-bottom: 3vh;
+}
+
+.rmv-from-fav{
+  color: red;
+  max-width: 617px !important;
+  border-radius: 0;
+  border-style: solid;
+  border-width: 3px ;
+  border-color: red;
   margin-bottom: 3vh;
 }
 
@@ -115,6 +145,11 @@ nav.pagination{
   background-color: black  !important;
 }
 
+.empty-fav{
+  padding-top: 10vh;
+  padding-left: 45vw;
+}
+
 .genre-list{
   padding: 2rem;
   position: fixed;
@@ -132,4 +167,90 @@ a{
   text-decoration-line: none;
   color: black;
   font-weight: 1000;
+}
+
+.poster{
+  margin: 10px;
+  border-style: solid;
+  border-width: 3px;
+  border-color: yellowgreen;
+}
+.under-poster-content{
+  text-align: center;
+  color: whitesmoke;
+}
+
+.movie-banner{
+  border-style: solid;
+  border-width: 2px;
+  border-color: yellow;
+}
+
+.movie-desc{
+  color: whitesmoke;
+}
+
+.movie-highlights{
+  margin: 20px;
+  border-style: solid;
+  border-width: 5px;
+  padding: 1rem;
+}
+
+.movie-content{
+  background-color: blueviolet;
+}
+
+.poster-card{
+  border-style: solid;
+  border-width: 3px;
+  border-color: yellowgreen;
+}
+
+.genre-tag{
+  width: auto;
+  margin: 1rem;
+  font-size: 1rem;
+}
+
+.login-with-google-btn {
+  transition: background-color .3s, box-shadow .3s;
+    
+  padding: 12px 16px 12px 42px;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+  
+  color: #757575;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=);
+  background-color: white;
+  background-repeat: no-repeat;
+  background-position: 12px 11px;
+  
+  &:hover {
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 2px 4px rgba(0, 0, 0, .25);
+  }
+  
+  &:active {
+    background-color: #eeeeee;
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 
+      0 -1px 0 rgba(0, 0, 0, .04),
+      0 2px 4px rgba(0, 0, 0, .25),
+      0 0 0 3px #c8dafc;
+  }
+  
+  &:disabled {
+    filter: grayscale(100%);
+    background-color: #ebebeb;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+    cursor: not-allowed;
+  }
 }
