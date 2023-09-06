@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {getAuth, GoogleAuthProvider,signInWithPopup} from "firebase/auth"
-import {getFirestore,collection,setDoc,doc, addDoc, getDoc} from "firebase/firestore"
+import {getFirestore,setDoc,doc, getDoc} from "firebase/firestore"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -31,10 +31,19 @@ export const signInWithGoogle = async ()=>{
     localStorage.setItem("UserName",userName)
     localStorage.setItem("email",email)
     localStorage.setItem("photoLink",photoLink)
+
+    // authorization done !
+
     const docRef = doc(db,"users",`${email}`)
     let docSnap = await getDoc(docRef)
-    let fvstr = docSnap.data()['Favourites']
-    localStorage.setItem("Favourites",fvstr)
+    //localStorage.setItem("temp",JSON.stringify(docSnap.data()))
+    if(docSnap.data() == undefined) // a new user, so store shell data for this user first
+    {
+      const payload = {Favourites : JSON.stringify([]) }
+      await setDoc(docRef,payload)
+      docSnap = await getDoc(docRef)
+    }
+    localStorage.setItem("Favourites",docSnap.data()["Favourites"])
     window.location.reload()
 }
 

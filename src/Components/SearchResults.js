@@ -76,12 +76,22 @@ export default class SearchResults extends Component {
         searchText = searchText.slice(0,-1)
         //console.log("search query", searchText)
         let resp = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=d2d5c04da9b8133f121a383dc3cb2d2a&query=${searchText}`)
-        
+        if(fvarr == undefined)
+        {
+            this.setState({
+                results: [...resp.data.results],
+                FavouritesArray: [],
+                searchQueryText: searchText
+            })
+        }
+        else
+        {
         this.setState({
             results: [...resp.data.results],
             FavouritesArray: [...fvarr],
             searchQueryText: searchText
         })
+    }
     }
 
     render() {

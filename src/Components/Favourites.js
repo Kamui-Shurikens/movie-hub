@@ -3,6 +3,7 @@ import { movies } from './GetMovies'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { updateFavsFromFireBase, updateFavsToFireBase } from '../firebase';
+import { hover } from '@testing-library/user-event/dist/hover';
 
 export default class Favourites extends Component {
 
@@ -236,9 +237,9 @@ export default class Favourites extends Component {
                                                 <th></th>
                                                 <th>Title</th>
                                                 <th>Genre</th>
-                                                <th><p style={{display:"inline"}} onClick={this.dateSortDec} >⬆️</p>ReleaseDate<p style={{display:"inline"}} onClick={this.dateSortInc} >⬇️</p></th>
-                                                <th><p style={{display:"inline"}} onClick={this.popularitySortDec} >⬆️</p>Popularity<p style={{display:"inline"}} onClick={this.popularitySortInc} >⬇️</p></th>
-                                                <th><p style={{display:"inline"}} onClick={this.ratingSortDec}>⬆️</p>Rating<p style={{display:"inline"}} onClick={this.ratingSortInc} >⬇️</p></th>
+                                                <th><p className='list-sorter' style={{display:"inline"}} onClick={this.dateSortDec} >⬆️</p>ReleaseDate<p className='list-sorter' style={{display:"inline"}} onClick={this.dateSortInc} >⬇️</p></th>
+                                                <th><p className='list-sorter' style={{display:"inline"}} onClick={this.popularitySortDec} >⬆️</p>Popularity<p className='list-sorter' style={{display:"inline"}} onClick={this.popularitySortInc} >⬇️</p></th>
+                                                <th><p className='list-sorter' style={{display:"inline"}} onClick={this.ratingSortDec}>⬆️</p>Rating<p className='list-sorter' style={{display:"inline"}} onClick={this.ratingSortInc} >⬇️</p></th>
                                                 <th>Overview</th>
                                                 <th></th>
                                             </tr>

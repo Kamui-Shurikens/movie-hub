@@ -156,6 +156,14 @@ nav.pagination{
   width: 15vw;
 }
 
+.list-sorter:hover{
+  cursor: pointer;
+}
+
+.genre-list:hover{
+  cursor: pointer;
+}
+
 .filter-search{
   padding: 3rem;
 }
